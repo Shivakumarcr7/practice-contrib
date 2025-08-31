@@ -1,0 +1,22 @@
+name: Auto Commit
+
+on:
+  schedule:
+    - cron: '0 14 * * *'   # runs every day at 7:30 PM IST (14:00 UTC)
+  workflow_dispatch:        # allows manual run
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Make a daily update
+        run: |
+          echo "- Auto update on $(date)" >> updates.txt
+          git config --global user.name "Shivakumarcr7"
+          git config --global user.email "patilshivakumarcr7@gmail.com"
+          git add updates.txt
+          git commit -m "chore: daily auto-update $(date)" || echo "No changes to commit"
+          git push
