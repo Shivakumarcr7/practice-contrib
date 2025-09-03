@@ -2,11 +2,11 @@ name: Auto Commit
 
 on:
   schedule:
-    - cron: '30 18 * * *'   # runs every day at 7:30 PM IST (14:00 UTC)
+    - cron: "0 18 * * *"   # runs daily at 12:00 AM IST (18:00 UTC)
   workflow_dispatch:       # allows manual run
 
 permissions:
-  contents: write          # <--- this line is important
+  contents: write
 
 jobs:
   build:
@@ -17,9 +17,9 @@ jobs:
 
       - name: Make a daily update
         run: |
-          echo "- Auto update on $(date)" >> updates.txt
+          echo "Last update: $(date)" > updates.txt
           git config --global user.name "Shivakumarcr7"
-          git config --global user.email "patilshivakumarcr7@gmail.com"
+          git config --global user.email "patilshivakumarcr7@users.noreply.github.com"
           git add updates.txt
           git commit -m "chore: daily auto-update $(date)"
           git push
