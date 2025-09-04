@@ -2,30 +2,29 @@ name: Auto Commit
 
 on:
   schedule:
-    - cron: "30 18 * * *"   # Runs daily at 12:00 AM IST
+    # Runs at 12:00 AM, 4:00 AM, 8:00 AM, 12:00 PM, and 4:00 PM IST
+    - cron: '30 18 * * *'   # 12:00 AM IST
+    - cron: '30 22 * * *'   # 4:00 AM IST
+    - cron: '30 2 * * *'    # 8:00 AM IST
+    - cron: '30 6 * * *'    # 12:00 PM IST
+    - cron: '30 10 * * *'   # 4:00 PM IST
   workflow_dispatch:
 
 permissions:
-  contents: write   # 👈 gives permission to push commits
+  contents: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}   # 👈 ensures push works
-
-      - name: Set Git Config
-        run: |
-          git config user.name "Shivakumarcr7"
-          git config user.email "141359854+Shivakumarcr7@users.noreply.github.com"
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Make a daily update
         run: |
-          echo "Daily update: $(date '+%Y-%m-%d %H:%M:%S %Z')" >> contribution.txt
-          git add contribution.txt
-          git commit -m "chore: daily auto-update $(date '+%Y-%m-%d %H:%M:%S %Z')" || echo "No changes to commit"
+          echo "- Auto update on $(date)" >> updates.txt
+          git config --global user.name "Shivakumarcr7"
+          git config --global user.email "patilshivakumarcr7@gmail.com"
+          git add updates.txt
+          git commit -m "chore: auto-update $(date)"
           git push
